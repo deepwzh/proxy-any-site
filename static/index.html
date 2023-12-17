@@ -1,0 +1,50 @@
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>域名地址生成器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-200">
+    <div class="max-w-4xl mx-auto my-12 p-8 border-4 border-gray-800 shadow-lg bg-white rounded-lg">
+        <h1 class="text-center text-3xl font-semibold text-gray-800 mb-8">域名地址生成器</h1>
+        <div class="flex justify-center mb-6">
+            <input id="domainInput" type="text" placeholder="请输入地址或域名" class="border-2 border-gray-500 p-3 w-3/4 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200 ease-in-out">
+        </div>
+        <div class="flex justify-center mb-6">
+            <button onclick="generateAddress()" class="border-2 border-gray-800 bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition duration-200 ease-in-out">生效</button>
+        </div>
+        <div id="result" class="text-center text-gray-800 text-lg"></div>
+    </div>
+
+    <script>
+        function generateAddress() {
+            var domain = document.getElementById('domainInput').value;
+            if (domain) {
+                // Replace with the actual API endpoint
+                fetch('/generate?domain=' + encodeURIComponent(domain))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code == 0) {
+                            document.getElementById('result').textContent = '生成的地址：' + data.data.proxy_uri;
+                        } else {
+                            document.getElementById('result').textContent = '生成地址失败, code:' + data.code + ",msg: "+ data.msg;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('result').textContent = '生成地址失败';
+                    });
+            } else {
+                document.getElementById('result').textContent = '请输入有效的域名';
+            }
+        }
+    </script>
+</body>
+</html>

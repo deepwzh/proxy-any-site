@@ -34,9 +34,11 @@ func NewDbClient() (*DbClient, error) {
 		return nil, fmt.Errorf("无法打开数据库连接：", err)
 	}
 
-	return &DbClient{
+	client := &DbClient{
 		db: db,
-	}, nil
+	}
+	client.Init()
+	return client, nil
 }
 
 func executeDatabaseQuery(db *sql.DB, query string, args ...interface{}) error {
